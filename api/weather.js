@@ -8,7 +8,9 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'unauthorized' });
   }
 
-  const location = req.query.location;
+  let location = req.query.location;
+  // 確保中文正確解碼（防止多層傳遞時編碼掉失）
+  try { location = decodeURIComponent(location); } catch (e) {}
   if (!location) {
     return res.status(400).json({ error: 'missing location parameter' });
   }
