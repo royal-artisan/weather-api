@@ -9,13 +9,13 @@ export default async function handler(req, res) {
   }
 
   let location = req.query.location;
-  // 確保中文正確解碼（防止多層傳遞時編碼掉失）
   try { location = decodeURIComponent(location); } catch (e) {}
   if (!location) {
     return res.status(400).json({ error: 'missing location parameter' });
   }
 
-  const cwaUrl = `${CWA_BASE}`
+  try {
+    const cwaUrl = `${CWA_BASE}`
       + `?Authorization=${encodeURIComponent(process.env.CWA_AUTH_KEY)}`
       + `&format=JSON`
       + `&locationName=${encodeURIComponent(location)}`;
