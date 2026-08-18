@@ -15,13 +15,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'missing location parameter' });
   }
 
-  try {
-    const url = new URL(CWA_BASE);
-    url.searchParams.set('Authorization', process.env.CWA_AUTH_KEY);
-    url.searchParams.set('format', 'JSON');
-    url.searchParams.set('locationName', location);
+  const cwaUrl = `${CWA_BASE}`
+      + `?Authorization=${encodeURIComponent(process.env.CWA_AUTH_KEY)}`
+      + `&format=JSON`
+      + `&locationName=${encodeURIComponent(location)}`;
 
-    const cwaRes = await fetch(url.toString(), {
+    const cwaRes = await fetch(cwaUrl, {
       signal: AbortSignal.timeout(20000),
     });
 
